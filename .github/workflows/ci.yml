@@ -6,35 +6,42 @@ on:
   pull_request:
 
 jobs:
+  
   pruebas:
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["22", "24"]
 
     steps:
       - name: Traer el código del repositorio
         uses: actions/checkout@v4
 
-      - name: Preparar Node.js 22 con caché
+      - name: Preparar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: ${{ matrix.node }}
           cache: npm
 
       - name: Instalar dependencias
         run: npm ci
 
-      - name: Ejecutar la suite de la Práctica 7
+      - name: Ejecutar las pruebas
         run: npm test
 
-      - name: Generar el reporte de cobertura
+      - name: Generar reporte de cobertura
         run: npm run test:cov
 
-      - name: Publicar el reporte como artefacto
+      - name: Publicar reporte como artefacto
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cobertura-${{ github.sha }}
+          name: cobertura-node-${{ matrix.node }}-${{ github.sha }}
           path: coverage/
           retention-days: 7
+
 
   calidad:
     runs-on: ubuntu-latest
