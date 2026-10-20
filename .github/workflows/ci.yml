@@ -78,12 +78,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      
       - name: Construir y publicar la imagen
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
-            ghcr.io/${{ github.repository }}:1.0.0
+            ghcr.io/agustinloaiza/com600-practica8:${{ github.sha }}
+            ghcr.io/agustinloaiza/com600-practica8:1.0.0
+
 
