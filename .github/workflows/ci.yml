@@ -35,3 +35,25 @@ jobs:
           name: cobertura-${{ github.sha }}
           path: coverage/
           retention-days: 7
+
+  calidad:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Traer el código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js 22 con caché
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Análisis estático con ESLint
+        run: npx eslint src test --max-warnings 0
+
+      - name: Escaneo de dependencias
+        run: npm audit --audit-level=critical
