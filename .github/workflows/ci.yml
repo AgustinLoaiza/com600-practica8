@@ -13,10 +13,11 @@ jobs:
       - name: Traer el código del repositorio
         uses: actions/checkout@v4
 
-      - name: Preparar Node.js 22
+      - name: Preparar Node.js 22 con caché
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: npm
 
       - name: Instalar dependencias
         run: npm ci
